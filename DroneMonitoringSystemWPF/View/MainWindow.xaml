@@ -1,0 +1,41 @@
+﻿<Window x:Class="DroneMonitoringSystemWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DroneMonitoringSystemWPF"
+        xmlns:converters ="clr-namespace:DroneMonitoringSystemWPF.Converters"
+        xmlns:viewModel ="clr-namespace:DroneMonitoringSystemWPF.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Window.DataContext>
+        <viewModel:DroneViewModel/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <converters:MultiMarginConverter x:Key="multiMarginConverter"/>
+        <DataTemplate x:Key="droneMarkerImage">
+            <Image Source="{Binding ElementName=droneGrid, Path = DataContext.DroneImage}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="droneMarker">
+            <Button Width="50" Height="50" Command="{Binding ElementName = droneGrid, Path = DataContext.DroneMarkerClickCommand}" 
+                    CommandParameter="{Binding ElementName=droneGrid, Path= DataContext.DroneStatus}" 
+                    Content="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ContentTemplate="{StaticResource droneMarkerImage}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button.Margin>
+                    <MultiBinding Converter="{StaticResource multiMarginConverter}">
+                        <Binding Path="Latitude"/>
+                        <Binding Path="Longitude"/>
+                    </MultiBinding>
+                </Button.Margin>
+            </Button>
+        </DataTemplate>
+    </Window.Resources>
+    
+
+    <Grid>
+        <Button Content=" Hi " Command="{Binding ConstructDroneImageCommand}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="296"/>
+        <ItemsControl x:Name="droneGrid" ItemsSource="{Binding DroneStatus}" ItemTemplate="{StaticResource droneMarker}"/>
+    </Grid>
+</Window>
