@@ -91,7 +91,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Converters\DroneStatusUpdateConverter.cs" />
     <Compile Include="Converters\MultiMarginConverter.cs" />
+    <Compile Include="Converters\ThicknessConverter.cs" />
     <Compile Include="Model\DroneModel.cs" />
     <Compile Include="ViewModel\DroneViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">

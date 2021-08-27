@@ -15,14 +15,20 @@
     
     <Window.Resources>
         <converters:MultiMarginConverter x:Key="multiMarginConverter"/>
+        <converters:ThicknessConverter x:Key="thicknessConverter"/>
+        <converters:DroneStatusUpdateConverter x:Key="droneStatusUpdateConverter"/>
         <DataTemplate x:Key="droneMarkerImage">
             <Image Source="{Binding ElementName=droneGrid, Path = DataContext.DroneImage}"/>
         </DataTemplate>
         <DataTemplate x:Key="droneMarker">
+            <!--CommandParameter="{Binding ElementName=droneGrid, Path= DataContext.DroneStatus}"-->
             <Button Width="50" Height="50" Command="{Binding ElementName = droneGrid, Path = DataContext.DroneMarkerClickCommand}" 
-                    CommandParameter="{Binding ElementName=droneGrid, Path= DataContext.DroneStatus}" 
+                    CommandParameter="{Binding}"
                     Content="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    BorderBrush="Red"
+                    BorderThickness="{Binding IsClicked, Converter={StaticResource thicknessConverter}}"
                     ContentTemplate="{StaticResource droneMarkerImage}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                
                 <Button.Margin>
                     <MultiBinding Converter="{StaticResource multiMarginConverter}">
                         <Binding Path="Latitude"/>
@@ -35,7 +41,28 @@
     
 
     <Grid>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" 
+                   Text="{Binding ClickedDroneStatus, Converter={StaticResource droneStatusUpdateConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                   Width="261" Margin="421,27,0,339" FontSize="24"/>
+        <ItemsControl ItemsSource="{Binding ClickedDroneStatus}" Margin="421,85,43,141">
+            <ItemsControl.ItemTemplate>                
+                <DataTemplate>
+                    <TextBlock Text="{Binding Latitude}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <Button Content=" Hi " Command="{Binding ConstructDroneImageCommand}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="296"/>
         <ItemsControl x:Name="droneGrid" ItemsSource="{Binding DroneStatus}" ItemTemplate="{StaticResource droneMarker}"/>
+        
+        <!--<ItemsControl x:Name="droneGrids" ItemsSource="{Binding DroneStatus}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Width="50" Height="50" Command="{Binding ElementName=droneGrids, Path = DataContext.DroneMarkerClickCommand}">
+                        <Image Source="{Binding ElementName=droneGrids, Path = DataContext.DroneImage}"/>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>-->
+
     </Grid>
 </Window>

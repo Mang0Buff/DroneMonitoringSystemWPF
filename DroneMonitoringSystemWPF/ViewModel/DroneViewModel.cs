@@ -13,8 +13,21 @@ using DroneMonitoringSystemWPF.Model;
 
 namespace DroneMonitoringSystemWPF.ViewModel
 {
-    class DroneViewModel : INotifyPropertyChanged
+    class DroneViewModel
     {
+        private ObservableCollection<DroneModel> clickedDroneStatus;
+        public ObservableCollection<DroneModel> ClickedDroneStatus
+        {
+            get
+            {
+                return clickedDroneStatus;
+            }
+            set
+            {
+                clickedDroneStatus = value;
+            }
+        }
+
         private ObservableCollection<DroneModel> droneStatus;
         public ObservableCollection<DroneModel> DroneStatus
         {
@@ -25,7 +38,6 @@ namespace DroneMonitoringSystemWPF.ViewModel
             set
             {
                 droneStatus = value;
-                OnPropertyChanged("droneStatus");
             }
         }
         public DelegateCommand DroneMarkerClickCommand { get; set; }
@@ -35,6 +47,8 @@ namespace DroneMonitoringSystemWPF.ViewModel
         public DroneViewModel()
         {
             DroneStatus = new ObservableCollection<DroneModel>();
+            ClickedDroneStatus = new ObservableCollection<DroneModel>();
+
             DroneMarkerClickCommand = new DelegateCommand(DroneMarkerClick);
             ConstructDroneImageCommand = new DelegateCommand(ConStructDroneImage);
         }
@@ -51,35 +65,37 @@ namespace DroneMonitoringSystemWPF.ViewModel
             //DroneImage = new Bitmap("E:\\Drone Projects\\DroneMonitoringSystemWPF\\DroneMonitoringSystemWPF\\Resources\\Hoya.png");
             DroneImage = new BitmapImage(new Uri("E:\\Drone Projects\\DroneMonitoringSystemWPF\\DroneMonitoringSystemWPF\\Resources\\Hoya.png"));
             DroneStatus.Add(droneModel);
+
+            droneModel = new DroneModel(1, 110, 100);
+            DroneStatus.Add(droneModel);
+
+            droneModel = new DroneModel(2, 200, 100);
+            DroneStatus.Add(droneModel);
         }
 
 
         private void DroneMarkerClick(object parameter)
-        {
-            //var selectedDroneStatus = parameter as ObservableCollection<DroneModel>;
-            var drone = (parameter as ObservableCollection<DroneModel>).Where(z => z.SysID == 0).FirstOrDefault();
-            if(drone != null)
+        {            
+            //var drone = (parameter as ObservableCollection<DroneModel>).Where(z => z.SysID == 0).FirstOrDefault();
+            var drone = parameter as DroneModel;
+            if(drone.IsClicked == false)
             {
-                Console.WriteLine("Exist!!");
+                if (ClickedDroneStatus.Count == 3) // 최대개수 3개
+                {
+                    return;
+                }
+                drone.IsClicked = true;
+                ClickedDroneStatus.Add(drone);
             }
             else
             {
-                Console.WriteLine("NOP!!");
+                drone.IsClicked = false;
+                ClickedDroneStatus.Remove(drone);
             }
         }
         #endregion
 
 
-        #region PropertyChange
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-        #endregion
-
+        
     }
 }
