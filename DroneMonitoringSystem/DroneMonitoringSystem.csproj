@@ -162,12 +162,6 @@
   <ItemGroup>
     <Resource Include="Resources\Hoya.png" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GMapLibrary\GMapLibrary.csproj">
-      <Project>{da3ced81-a5da-4332-8ac9-e417b69d1f36}</Project>
-      <Name>GMapLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
