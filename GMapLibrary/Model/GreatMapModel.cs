@@ -30,7 +30,7 @@ namespace GreatMaps.Model
         public GreatMapModel()
         {
             GMapControl = new GMapControl();
-            GMapControl.CacheLocation = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName + @"\GMapLibrary\Resources\";
+            GMapControl.CacheLocation = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\GMapLibrary\Resources\";
             GMapControl.BoundsOfMap = RectLatLng.FromLTRB(126.397361, 37.496243, 126.485939, 37.429751);
             GMapControl.Manager.Mode = AccessMode.CacheOnly;
             GMapControl.MapProvider = GMapProviders.GoogleSatelliteMap;
